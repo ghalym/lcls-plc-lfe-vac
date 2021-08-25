@@ -79,6 +79,10 @@
       <DefaultResolution>Tc2_System, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_System</Namespace>
     </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_Utilities">
+      <DefaultResolution>Tc2_Utilities, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_Utilities</Namespace>
+    </PlaceholderReference>
     <PlaceholderReference Include="Tc3_Module">
       <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc3_Module</Namespace>
@@ -129,7 +133,7 @@
     </PlaceholderResolution>
   </ItemGroup>
   <ItemGroup>
-    <LibraryReference Include="LCLS Vacuum,1.6.0,SLAC - LCLS">
+    <LibraryReference Include="LCLS Vacuum,0.0.0,SLAC - LCLS">
       <Namespace>LCLS_Vacuum</Namespace>
     </LibraryReference>
     <LibraryReference Include="PMPS,2.0.0,SLAC - LCLS">

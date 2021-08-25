@@ -12,9 +12,17 @@ VAR
 	fbLogger: FB_LogMessage := (eSubsystem:=E_SubSystem.VACUUM);
 	rt_bValid: R_TRIG;
 	ft_bValid: F_TRIG;
-	
+	fbGetCurTaskIdx  : GETCURTASKINDEX;
+	tRecover: TON;
+	bRecover : BOOL := TRUE;
+	// For Persistent Data
+	fbWritePersistentData           : WritePersistentData;
+	tWait:TIME:=T#10S;
 END_VAR
-]]></Declaration>
+
+VAR PERSISTENT
+	bWasOn : BOOL;
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[fb_to_LFE_Arbiter(Arbiter := g_fbArbiter1, fbFFHWO := g_FastFaultOutput1);
 
@@ -417,7 +425,48 @@ g_FastFaultOutput2.Execute(i_xVeto:=PMPS_GVL.stCurrentBeamParameters.aVetoDevice
 
 ctuTest(CU:=GVL_LFE_VAC_PMPS.g_FastFaultOutput1.q_xFastFaultOut, PV:=100);
 	
-]]></ST>
+
+
+(*Auto Recover*)
+fbWritePersistentData(NETID:='', PORT:=851, START:=TRUE, TMOUT:=T#1s );
+ACT_Recover();]]></ST>
     </Implementation>
+    <Action Name="ACT_Recover" Id="{a45184a5-2c79-48cd-a33f-6b1b5a0b6d6f}">
+      <Implementation>
+        <ST><![CDATA[fbGetCurTaskIdx();
+IF (_TaskInfo[fbGetCurTaskIdx.index].FirstCycle) THEN
+	bRecover:=TRUE;
+END_IF
+tRecover(IN:= bRecover, PT:=tWait);
+IF (tRecover.Q) AND bRecover THEN
+	RTDSL0_PIP_01.M_Recover();
+	RTDSL0_PIP_02.M_Recover();
+	RTDSL0_PIP_03.M_Recover();
+	RTDSL0_PIP_04.M_Recover();
+	RTDSL0_PIP_05.M_Recover();
+	IM1L0_XTES_PIP_01.M_Recover();
+	TV2L0_PIP_01.M_Recover();
+	TV2L0_PIP_02.M_Recover();
+	TV2L0_PIP_03.M_Recover();
+	SL1L0_POWER_PIN_01.M_Recover();
+	AT2L0_SOLID_PIN_01.M_Recover();
+	SP1L0_KMONO_PIP_01.M_Recover();
+	PA1L0_PIN_01.M_Recover();
+	MR1L0_HOMS_PIP_01.M_Recover();
+	BT2L0_PLEG_PIP_01.M_Recover();
+	MR2L0_HOMS_PIP_01.M_Recover();
+	TV3L0_PIP_01.M_Recover();
+	ST1L0_XTES_PIP_01.M_Recover();
+	TV4L0_PIP_01.M_Recover();
+	TV4L0_PIP_02.M_Recover();
+	PA2L0_PIN_01.M_Recover();
+	TV5L0_PIP_01.M_Recover();
+	TV5L0_PIP_02.M_Recover();
+	TV5L0_PIP_03.M_Recover();
+	bRecover := False;
+END_IF
+]]></ST>
+      </Implementation>
+    </Action>
   </POU>
 </TcPlcObject>
