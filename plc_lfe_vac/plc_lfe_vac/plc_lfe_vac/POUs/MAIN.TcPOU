@@ -17,12 +17,9 @@ VAR
 	bRecover : BOOL := TRUE;
 	// For Persistent Data
 	fbWritePersistentData           : WritePersistentData;
-	tWait:TIME:=T#10S;
+	tWait:TIME:=T#900S;
 END_VAR
-
-VAR PERSISTENT
-	bWasOn : BOOL;
-END_VAR]]></Declaration>
+]]></Declaration>
     <Implementation>
       <ST><![CDATA[fb_to_LFE_Arbiter(Arbiter := g_fbArbiter1, fbFFHWO := g_FastFaultOutput1);
 
